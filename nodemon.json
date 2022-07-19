@@ -1,0 +1,9 @@
+{
+  "ignore": ["**/*.test.ts", "**/*.spec.ts", "node_modules", "build"],
+  "watch": ["src"],
+  "exec": "ts-node ./src/index.ts",
+  "ext": "ts",
+  "env": {
+    "NODE_ENV": "development"
+  }
+}

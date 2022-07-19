@@ -6,7 +6,7 @@ import short from 'short-uuid';
 import userModel from './models/users';
 import { auth, createToken } from './middleware/auth';
 
-const PORT = 3000;
+const PORT = process.env.port || 3000;
 
 const server = jsonServer.create();
 

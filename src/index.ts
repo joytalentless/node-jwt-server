@@ -20,7 +20,10 @@ server.post('/auth/register', async (req, res) => {
   const found = await userModel.find(email, password);
 
   if (found) {
-    res.status(200).json({ user: found });
+    res.status(200).json({
+      success: false,
+      message: 'User found with same email.',
+    });
     return;
   }
 
@@ -35,19 +38,28 @@ server.post('/auth/register', async (req, res) => {
   await userModel.write(userDocs);
 
   const access_token = createToken({ email, password });
-  res.status(200).json({ access_token });
+  res.status(200).json({
+    success: true,
+    access_token,
+  });
 });
 
 server.post('/auth/login', async (req, res) => {
   const { email, password } = req.body;
   const found = await userModel.find(email, password);
   if (!found) {
-    res.status(200).json({ message: 'Incorrect email or password' });
+    res.status(200).json({
+      success: false,
+      message: 'Incorrect email or password.',
+    });
     return;
   }
-
   const access_token = createToken({ email, password });
-  res.status(200).json({ access_token });
+  res.status(200).json({
+    success: true,
+    access_token,
+    user: found,
+  });
 });
 
 server.use(/^(?!\/auth).*$/, auth);

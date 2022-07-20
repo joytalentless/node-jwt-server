@@ -13,7 +13,7 @@ const read = async () => {
 };
 
 const write = async (data) => {
-  return await fsPromises.writeFile(
+  await fsPromises.writeFile(
     path.join(CURRENT_WORKING_DIR, 'src/users.json'),
     JSON.stringify(data),
   );
@@ -21,8 +21,6 @@ const write = async (data) => {
 
 const find = async (email, password) => {
   const userDocs = await userModel.read();
-  console.log('userDocs', userDocs);
-
   if (!userDocs || userDocs.length === 0) return null;
   return userDocs.find(
     (user) => user.email === email && user.password === password,

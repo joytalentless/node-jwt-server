@@ -13,7 +13,7 @@ const read = async () => {
 };
 
 const write = async (data) => {
-  await fsPromises.writeFile(
+  return await fsPromises.writeFile(
     path.join(CURRENT_WORKING_DIR, 'src/users.json'),
     JSON.stringify(data),
   );

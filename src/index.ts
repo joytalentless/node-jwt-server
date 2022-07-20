@@ -16,6 +16,8 @@ server.use(jsonServer.defaults());
 
 // Register New User
 server.post('/auth/register', async (req, res) => {
+  console.log('auth/register payload', req.body);
+
   const { email, password } = req.body;
   const found = await userModel.find(email, password);
 
@@ -28,13 +30,13 @@ server.post('/auth/register', async (req, res) => {
   }
 
   const userDocs = await userModel.read();
-
-  const user = { id: short.generate(), email: email, password: password };
+  const user = { id: short.generate(), email, password };
   userDocs.push(user);
+  const newUserDocs = await userModel.write(userDocs);
 
-  await userModel.write(userDocs);
+  console.log('newUserDocs', newUserDocs);
+
   const access_token = createToken({ email, password });
-
   res.status(200).json({
     success: true,
     access_token,
@@ -43,6 +45,7 @@ server.post('/auth/register', async (req, res) => {
 });
 
 server.post('/auth/login', async (req, res) => {
+  console.log('auth/login payload', req.body);
   const { email, password } = req.body;
   const found = await userModel.find(email, password);
   console.log('found /auth/login', found);

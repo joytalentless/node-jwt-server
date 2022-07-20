@@ -21,6 +21,8 @@ const write = async (data) => {
 
 const find = async (email, password) => {
   const userDocs = await userModel.read();
+  console.log('userDocs', userDocs);
+
   if (!userDocs || userDocs.length === 0) return null;
   return userDocs.find(
     (user) => user.email === email && user.password === password,

@@ -29,24 +29,24 @@ server.post('/auth/register', async (req, res) => {
 
   const userDocs = await userModel.read();
 
-  userDocs.push({
-    id: short.generate(),
-    email: email,
-    password: password,
-  });
+  const user = { id: short.generate(), email: email, password: password };
+  userDocs.push(user);
 
   await userModel.write(userDocs);
-
   const access_token = createToken({ email, password });
+
   res.status(200).json({
     success: true,
     access_token,
+    user,
   });
 });
 
 server.post('/auth/login', async (req, res) => {
   const { email, password } = req.body;
   const found = await userModel.find(email, password);
+  console.log('found /auth/login', found);
+
   if (!found) {
     res.status(200).json({
       success: false,
@@ -65,5 +65,5 @@ server.post('/auth/login', async (req, res) => {
 server.use(/^(?!\/auth).*$/, auth);
 
 server.listen(PORT, () => {
-  console.log('JWT Auth API Server');
+  console.log(`JWT Auth API Server listening on port ${PORT}`);
 });
